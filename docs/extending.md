@@ -155,7 +155,7 @@ Keep the dry-run result schema close to the applied result so callers can inspec
 
 ## 7. Add an interactive prompt
 
-Prompts are adapters, not the only workflow.
+Prompts are adapters; every workflow also has a prompt-free route.
 
 - Load prompt libraries inside the prompt function so headless startup remains fast.
 - Pass `context.signal`.
