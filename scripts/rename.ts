@@ -85,12 +85,21 @@ const main = async (): Promise<void> => {
   const apply = flags.includes("--apply");
   const root = path.resolve(import.meta.dir, "..");
   const files = await editableFiles(root);
+  const excludedFiles = new Set([
+    path.resolve(root, "scripts/__tests__/rename.test.ts"),
+    path.resolve(root, "scripts/rename.ts"),
+  ]);
+  // The rename machinery keeps its template tokens; consumers delete it after applying.
   const candidates = await Promise.all(
-    files.map(async (filePath) => {
-      const contents = await Bun.file(filePath).text();
-      const next = replaceTemplateTokens(contents, name);
-      return next === contents ? undefined : { contents: next, path: filePath };
-    })
+    files
+      .filter((filePath) => !excludedFiles.has(filePath))
+      .map(async (filePath) => {
+        const contents = await Bun.file(filePath).text();
+        const next = replaceTemplateTokens(contents, name);
+        return next === contents
+          ? undefined
+          : { contents: next, path: filePath };
+      })
   );
   const changes = candidates.filter(
     (change): change is { path: string; contents: string } =>
@@ -113,7 +122,7 @@ const main = async (): Promise<void> => {
   }
   if (apply) {
     console.log(
-      `\nRenamed ${changes.length} files for ${name}. Run 'bun install && bun run ci'.`
+      `\nRenamed ${changes.length} files for ${name}. Run 'bun install && bun run ci', then delete scripts/rename.ts and scripts/__tests__/rename.test.ts and remove the "rename" script from package.json — the rename is one-shot.`
     );
   } else {
     console.log(

@@ -102,7 +102,7 @@ The rename updates:
 - `CLI_TEMPLATE` to the environment-variable prefix; and
 - `CliTemplate` to the PascalCase identifier.
 
-After renaming, update the description, homepage, repository metadata, license holder, and `SKILL.md` wording for the real product.
+After renaming, update the description, homepage, repository metadata, license holder, and `SKILL.md` wording for the real product. Then delete `scripts/rename.ts`, its `__tests__` directory, and the `rename` entry in `package.json`; the rename is one-shot and those files deliberately keep template tokens.
 
 `package.json` starts with `"private": true` to prevent accidental npm publication. Remove or change that guard only when package-registry publishing is an intentional release channel.
 
