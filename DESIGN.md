@@ -64,7 +64,7 @@ ASCII fallbacks preserve the same column width where possible.
 
 **Progress:** a spinner may be used for indeterminate interactive work longer than a perceptible instant. Non-TTY and machine modes receive quiet execution or explicit stderr lifecycle lines.
 
-**Table:** borderless, left-aligned, bold header row, no colour in cell values unless it communicates state. Column padding is capped so one long value cannot push every other column off screen.
+**Table:** borderless, left-aligned, bold header row, no colour in cell values unless it communicates state. Column padding is capped so one long value cannot push every other column off screen. Sectioned tables share one set of column widths across every section: a single bold header, then each section introduced by a dimmed title with its rows beneath. Ungrouped rows come first without a title.
 
 ## Do's and Don'ts
 

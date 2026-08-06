@@ -9,7 +9,13 @@ export {
   ServiceRegistry,
 } from "./services.ts";
 export { createUi, stripAnsi } from "./style.ts";
-export type { ColorMode, StyleOptions, Symbols, Ui } from "./style.ts";
+export type {
+  ColorMode,
+  StyleOptions,
+  Symbols,
+  TableSection,
+  Ui,
+} from "./style.ts";
 export type {
   CliApplication,
   CliDefinition,

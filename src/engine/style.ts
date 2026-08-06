@@ -17,6 +17,11 @@ export interface Symbols {
   warning: string;
 }
 
+export interface TableSection {
+  title?: string;
+  rows: readonly (readonly unknown[])[];
+}
+
 export interface Ui {
   readonly colorEnabled: boolean;
   readonly symbols: Symbols;
@@ -34,6 +39,10 @@ export interface Ui {
   table: (
     headers: readonly string[],
     rows: readonly (readonly unknown[])[]
+  ) => string;
+  sectionedTable: (
+    headers: readonly string[],
+    sections: readonly TableSection[]
   ) => string;
 }
 
@@ -117,6 +126,55 @@ export const createUi = (options: StyleOptions): Ui => {
         warning: "[warn]",
       };
 
+  const visibleWidth = (value: string): number =>
+    Bun.stringWidth(stripAnsi(value), { countAnsiEscapeCodes: false });
+
+  const renderRow = (
+    row: readonly string[],
+    widths: readonly number[],
+    style?: (value: string) => string
+  ): string =>
+    row
+      .map((cell, column) => {
+        const width = widths[column] ?? 0;
+        const padded = `${cell}${" ".repeat(
+          Math.max(0, width - visibleWidth(cell))
+        )}`;
+        return style === undefined ? padded : style(padded);
+      })
+      .join("  ")
+      .trimEnd();
+
+  const sectionedTable = (
+    headers: readonly string[],
+    sections: readonly TableSection[]
+  ): string => {
+    const stringSections = sections.map((section) => ({
+      rows: section.rows.map((row) => row.map(stringifyCell)),
+      title: section.title,
+    }));
+    const allRows = [
+      [...headers],
+      ...stringSections.flatMap((section) => section.rows),
+    ];
+    const widths = headers.map((_, column) =>
+      Math.min(
+        48,
+        Math.max(...allRows.map((row) => visibleWidth(row[column] ?? "")))
+      )
+    );
+    const lines = [renderRow(headers, widths, color.bold)];
+    for (const section of stringSections) {
+      if (section.title !== undefined) {
+        lines.push("", color.bold(color.dim(section.title)));
+      }
+      for (const row of section.rows) {
+        lines.push(renderRow(row, widths));
+      }
+    }
+    return lines.join("\n");
+  };
+
   return {
     brand: color.magenta,
     colorEnabled: enabled,
@@ -132,37 +190,11 @@ export const createUi = (options: StyleOptions): Ui => {
     },
     info: color.blue,
     muted: color.dim,
+    sectionedTable,
     success: color.green,
     symbols,
     table(headers, rows) {
-      const values = [headers, ...rows].map((row) => row.map(stringifyCell));
-      const widths = headers.map((_, column) =>
-        Math.min(
-          48,
-          Math.max(
-            ...values.map((row) =>
-              Bun.stringWidth(stripAnsi(row[column] ?? ""), {
-                countAnsiEscapeCodes: false,
-              })
-            )
-          )
-        )
-      );
-      return values
-        .map((row, rowIndex) =>
-          row
-            .map((cell, column) => {
-              const width = widths[column] ?? 0;
-              const visible = Bun.stringWidth(stripAnsi(cell), {
-                countAnsiEscapeCodes: false,
-              });
-              const padded = `${cell}${" ".repeat(Math.max(0, width - visible))}`;
-              return rowIndex === 0 ? color.bold(padded) : padded;
-            })
-            .join("  ")
-            .trimEnd()
-        )
-        .join("\n");
+      return sectionedTable(headers, [{ rows }]);
     },
     warning: color.yellow,
   };
