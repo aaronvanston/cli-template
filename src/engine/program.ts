@@ -139,7 +139,12 @@ const ensureParent = (
     if (parent === undefined) {
       parent = current.command(token);
       const module = modules.find((candidate) => candidate.id === token);
-      parent.description(module?.summary ?? `${token} commands`);
+      const groupDescription = modules
+        .map((candidate) => candidate.commandGroups?.[token])
+        .find((description) => description !== undefined);
+      parent.description(
+        groupDescription ?? module?.summary ?? `${token} commands`
+      );
       parent.showHelpAfterError();
       parents.set(key, parent);
     }
@@ -151,12 +156,19 @@ const ensureParent = (
 const helpConfiguration = (
   ui: ReturnType<typeof createUi>
 ): HelpConfiguration => ({
+  // The root description lives in the hero banner instead.
+  commandDescription(command) {
+    return command.parent === null ? "" : command.description();
+  },
   optionDescription(option) {
     const fallback = option.description;
     return ui.muted(fallback);
   },
   optionTerm(option) {
     return ui.flag(option.flags);
+  },
+  styleTitle(title) {
+    return ui.heading(title);
   },
   subcommandDescription(command) {
     return ui.muted(command.description());
@@ -224,6 +236,7 @@ export const createCli = (definition: CliDefinition): CliApplication => {
         .showHelpAfterError(
           `(run '${definition.meta.name} <command> --help' for details)`
         )
+        .helpCommand(false)
         .exitOverride()
         .configureHelp(helpConfiguration(preflightUi))
         .addOption(
@@ -244,7 +257,9 @@ export const createCli = (definition: CliDefinition): CliApplication => {
         "before",
         `${preflightUi.brand("◆")} ${preflightUi.heading(
           definition.meta.name
-        )} ${preflightUi.muted(definition.meta.version)}\n\n`
+        )} ${preflightUi.muted(definition.meta.version)}\n${
+          definition.meta.description
+        }\n`
       );
       program.addHelpText(
         "after",
@@ -273,6 +288,16 @@ export const createCli = (definition: CliDefinition): CliApplication => {
           parentCommands.get(commandPath) ?? parent.command(commandName);
         command.description(spec.summary);
         parentCommands.set(commandPath, command);
+        const owningModule = definition.modules.find(
+          (candidate) => candidate.id === spec.module
+        );
+        if (owningModule?.helpGroup !== undefined) {
+          const topLevel =
+            spec.path.length === 1
+              ? command
+              : parentCommands.get(spec.path[0] ?? "");
+          topLevel?.helpGroup(owningModule.helpGroup);
+        }
         for (const alias of spec.aliases ?? []) {
           command.alias(alias);
         }

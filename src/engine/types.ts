@@ -150,6 +150,12 @@ export interface CommandSpec<
 export interface CliModule {
   id: string;
   summary: string;
+  // Heading for this module's commands in root help. Omit to use
+  // Commander's default "Commands:" group.
+  helpGroup?: string;
+  // Descriptions for intermediate command groups this module creates,
+  // keyed by the group token (e.g. { daemon: "Manage the daemon" }).
+  commandGroups?: Readonly<Record<string, string>>;
   commands: readonly CommandSpec[];
   services?: readonly ServiceProvider<unknown>[];
   healthChecks?: readonly HealthCheck[];

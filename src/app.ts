@@ -12,5 +12,5 @@ export const app = createCli({
     name: "cli-template",
     version: packageJson.version,
   },
-  modules: [systemModule, apiModule, itemsModule],
+  modules: [apiModule, itemsModule, systemModule],
 });

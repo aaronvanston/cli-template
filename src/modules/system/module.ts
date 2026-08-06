@@ -73,6 +73,7 @@ export const systemModule = defineModule({
       },
     },
   ],
+  helpGroup: "System commands:",
   id: "system",
   summary: "Inspect and diagnose the CLI",
 });
