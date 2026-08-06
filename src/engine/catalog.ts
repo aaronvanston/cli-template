@@ -142,7 +142,7 @@ export const renderMarkdownReference = (
           option.defaultValue === undefined
             ? ""
             : ` Default: \`${defaultValue(option.defaultValue)}\`.`;
-        lines.push(`- \`${option.flags}\` — ${option.description}.${suffix}`);
+        lines.push(`- \`${option.flags}\`: ${option.description}.${suffix}`);
       }
     }
     if (command.examples.length > 0) {

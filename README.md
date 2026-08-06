@@ -182,7 +182,7 @@ Feature code does not import Commander and does not print directly. Handlers ret
 
 ## Add, replace, or remove a feature
 
-The `items` module exists to show a complete read/write pattern. It is test data, not a domain assumption.
+The `items` module exists to show a complete read/write pattern. It is test data and never a domain assumption.
 
 For a small CLI, rename `src/modules/items/` and edit its descriptors. For a different product shape:
 
@@ -220,7 +220,7 @@ export CLI_TEMPLATE_BASE_URL=https://api.example.com
 export CLI_TEMPLATE_TOKEN=replace-me
 ```
 
-A local `.env` file also works during development — Bun loads it automatically and git ignores it. Compiled releases deliberately do not auto-load `.env`, so release configuration stays explicit.
+A local `.env` file also works during development: Bun loads it automatically and git ignores it. Compiled releases deliberately do not auto-load `.env`, so release configuration stays explicit.
 
 The defaults target the bundled example server. The token is never embedded in generated curl output or diagnostics.
 

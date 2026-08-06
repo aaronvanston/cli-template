@@ -17,7 +17,7 @@ HTTP methods use the same compact protocol palette as Vercel: GET is cyan, POST 
 
 ## Typography
 
-The terminal owns the typeface. Hierarchy comes from weight, indentation, whitespace, and sparing colour rather than simulated display typography.
+The terminal owns the typeface. Hierarchy comes from weight, indentation, whitespace, and sparing colour. There is no simulated display typography.
 
 - Product and section headings use bold.
 - Commands, flags, paths, IDs, and values retain monospace terminal text.
@@ -40,7 +40,7 @@ Terminal hierarchy is flat. Weight, indentation, semantic colour, and blank line
 
 ## Symbols
 
-Symbols are small state markers, not decoration:
+Symbols are small state markers:
 
 - `✓` / `[ok]` success
 - `!` / `[warn]` warning
@@ -52,7 +52,7 @@ ASCII fallbacks preserve the same column width where possible.
 
 ## Components
 
-**Brand line:** a single brand-coloured mark, CLI name, and muted version. It appears on root help and interactive onboarding, not before every result.
+**Brand line:** a single brand-coloured mark, CLI name, and muted version. It appears on root help and interactive onboarding only.
 
 **Help:** usage, one-sentence purpose, grouped commands, global options, examples, and a final discovery hint. Command help leads with runnable examples before exhaustive options.
 
@@ -60,7 +60,7 @@ ASCII fallbacks preserve the same column width where possible.
 
 **Error:** starts with a stable error label and human message, followed by a `hint:` or `docs:` line when actionable. JSON mode emits the same code, message, and remediation fields.
 
-**Prompt:** line-oriented prompts only. The user sees the decision and default before input. Large catalogues use live autocomplete search across names and supporting metadata, keep the method or category colour visible, and show the highlighted item's description. Cancellation returns a named result rather than a stack trace.
+**Prompt:** line-oriented prompts only. The user sees the decision and default before input. Large catalogues use live autocomplete search across names and supporting metadata, keep the method or category colour visible, and show the highlighted item's description. Cancellation returns a named result, never a stack trace.
 
 **Progress:** a spinner may be used for indeterminate interactive work longer than a perceptible instant. Non-TTY and machine modes receive quiet execution or explicit stderr lifecycle lines.
 

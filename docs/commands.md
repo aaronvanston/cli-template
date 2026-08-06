@@ -12,15 +12,15 @@ Uses the same fixed-origin client as porcelain commands. Run without a path for 
 
 ### Options
 
-- `-X, --method <method>` — HTTP method; defaults to the selected operation, POST with a body, or GET.
-- `-H, --header <header>` — Request header as 'name: value' (repeatable). Default: `[]`.
-- `-F, --field <key=value>` — Typed JSON body field (repeatable). Default: `[]`.
-- `-f, --raw-field <key=value>` — String body field (repeatable). Default: `[]`.
-- `--input <path>` — Read a JSON object from a file or '-' for stdin.
-- `-i, --include` — Include response status and headers.
-- `--silent` — Emit no response body; use exit status only.
-- `--timeout <milliseconds>` — Request timeout. Default: `30000`.
-- `--generate <format>` — Generate a safe request instead of sending it.
+- `-X, --method <method>`: HTTP method; defaults to the selected operation, POST with a body, or GET.
+- `-H, --header <header>`: Request header as 'name: value' (repeatable). Default: `[]`.
+- `-F, --field <key=value>`: Typed JSON body field (repeatable). Default: `[]`.
+- `-f, --raw-field <key=value>`: String body field (repeatable). Default: `[]`.
+- `--input <path>`: Read a JSON object from a file or '-' for stdin.
+- `-i, --include`: Include response status and headers.
+- `--silent`: Emit no response body; use exit status only.
+- `--timeout <milliseconds>`: Request timeout. Default: `30000`.
+- `--generate <format>`: Generate a safe request instead of sending it.
 
 ### Examples
 
@@ -48,7 +48,7 @@ List known API operations
 
 ### Options
 
-- `--filter <query>` — Filter by method, path, tag, or summary. Default: `""`.
+- `--filter <query>`: Filter by method, path, tag, or summary. Default: `""`.
 
 ### Examples
 
@@ -98,8 +98,8 @@ Create an example item with explicit mutation safety
 
 ### Options
 
-- `--dry-run` — Print the request plan without sending it.
-- `-y, --yes` — Confirm the mutation without prompting.
+- `--dry-run`: Print the request plan without sending it.
+- `-y, --yes`: Confirm the mutation without prompting.
 
 ### Examples
 
@@ -114,7 +114,7 @@ List example items through the shared API service
 
 ### Options
 
-- `--limit <count>` — Maximum number of items. Default: `20`.
+- `--limit <count>`: Maximum number of items. Default: `20`.
 
 ### Examples
 
